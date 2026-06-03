@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SDG47 - OBS Studio Alert Widget</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="Img Ordner/Website Icon Ordner/Logo Overlay 1.1.png"
+    />
+    <link rel="stylesheet" href="sdg47-obs-studio-alert-widget.css" />
+    <style></style>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@streamerbot/client/dist/streamerbot-client.js"
+    ></script>
+    <script defer src="sdg47-obs-studio-alert-widget.js"></script>
+  </head>
+  <body>
+    <div id="mainFollowAlertContainerId" class="main-follow-alert-container">
+      <div
+        id="followAlertVideoAudioContainerId"
+        class="follow-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="followAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-follower.webm"
+          class="follow-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="followAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Follow.wav"
+            class="follow-alert-audio"
+            loading="eager"
+          ></audio>
+        </video>
+      </div>
+      <div
+        id="followAlertImgTextContainerId"
+        class="follow-alert-img-text-container"
+      >
+        <div id="followAlertImgContainerId" class="follow-alert-img-container">
+          <div
+            id="followAlertImgBgContainerId"
+            class="follow-alert-img-bg-container"
+          >
+            <img
+              width="300"
+              height="300"
+              id="followAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="follow-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div
+          id="followAlertTextContainerId"
+          class="follow-alert-text-container"
+        >
+          <span id="followAlertTextSpanId" class="follow-alert-text-span">
+            Aktueller Follower
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="mainSubAlertContainerId" class="main-sub-alert-container">
+      <div
+        id="subAlertVideoAudioContainerId"
+        class="sub-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="subAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-subscriber.webm"
+          class="sub-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="subAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Subscriber.wav"
+            class="sub-alert-audio"
+          ></audio>
+        </video>
+      </div>
+      <div id="subAlertImgTextContainerId" class="sub-alert-img-text-container">
+        <div id="subAlertImgContainerId" class="sub-alert-img-container">
+          <div id="subAlertImgBgContainerId" class="sub-alert-img-bg-container">
+            <img
+              width="300"
+              height="300"
+              id="subAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="sub-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div id="subAlertTextContainerId" class="sub-alert-text-container">
+          <span id="subAlertTextSpanId" class="sub-alert-text-span">
+            Aktueller Subscription
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="mainCheerAlertContainerId" class="main-cheer-alert-container">
+      <div
+        id="cheerAlertVideoAudioContainerId"
+        class="cheer-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="cheerAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-cheer.webm"
+          class="cheer-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="cheerAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Cheer.wav"
+            class="cheer-alert-audio"
+          ></audio>
+        </video>
+      </div>
+      <div
+        id="cheerAlertImgTextContainerId"
+        class="cheer-alert-img-text-container"
+      >
+        <div id="cheerAlertImgContainerId" class="cheer-alert-img-container">
+          <div
+            id="cheerAlertImgBgContainerId"
+            class="cheer-alert-img-bg-container"
+          >
+            <img
+              width="300"
+              height="300"
+              id="cheerAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="cheer-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div id="cheerAlertTextContainerId" class="cheer-alert-text-container">
+          <span id="cheerAlertTextSpanId" class="cheer-alert-text-span">
+            Aktuelle Bit's
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="mainRaidAlertContainerId" class="main-raid-alert-container">
+      <div
+        id="raidAlertVideoAudioContainerId"
+        class="raid-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="raidAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-raid.webm"
+          class="raid-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="raidAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Raid.wav"
+            class="raid-alert-audio"
+          ></audio>
+        </video>
+      </div>
+      <div
+        id="raidwAlertImgTextContainerId"
+        class="raid-alert-img-text-container"
+      >
+        <div id="raidAlertImgContainerId" class="raid-alert-img-container">
+          <div
+            id="raidAlertImgBgContainerId"
+            class="raid-alert-img-bg-container"
+          >
+            <img
+              width="300"
+              height="300"
+              id="raidAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="raid-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div id="raidAlertTextContainerId" class="raid-alert-text-container">
+          <span id="raidAlertTextSpanId" class="raid-alert-text-span">
+            Aktueller Raid
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="mainHostAlertContainerId" class="main-host-alert-container">
+      <div
+        id="hostAlertVideoAudioContainerId"
+        class="host-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="hostAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-host.webm"
+          class="host-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="hostAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Host.wav"
+            class="host-alert-audio"
+          ></audio>
+        </video>
+      </div>
+      <div
+        id="hostAlertImgTextContainerId"
+        class="host-alert-img-text-container"
+      >
+        <div id="hostAlertImgContainerId" class="host-alert-img-container">
+          <div
+            id="hostAlertImgBgContainerId"
+            class="host-alert-img-bg-container"
+          >
+            <img
+              width="300"
+              height="300"
+              id="hostAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="host-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div id="hostAlertTextContainerId" class="host-alert-text-container">
+          <span id="hostAlertTextSpanId" class="host-alert-text-span">
+            Aktueller Host
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      id="mainDonationAlertContainerId"
+      class="main-donation-alert-container"
+    >
+      <div
+        id="donationAlertVideoAudioContainerId"
+        class="donation-alert-video-audio-container"
+      >
+        <video
+          width="600"
+          height="600"
+          id="donationAlertVideoId"
+          src="Alert Ordner/Video Ordner/Iridos-alert-donation.webm"
+          class="donation-alert-video"
+          loading="eager"
+        >
+          <audio
+            id="donationAlertAudioId"
+            src="Alert Ordner/Audio Ordner/Donation.wav"
+            class="donation-alert-audio"
+          ></audio>
+        </video>
+      </div>
+      <div
+        id="donationAlertImgTextContainerId"
+        class="donation-alert-img-text-container"
+      >
+        <div
+          id="donationAlertImgContainerId"
+          class="donation-alert-img-container"
+        >
+          <div
+            id="donationAlertImgBgContainerId"
+            class="donation-alert-img-bg-container"
+          >
+            <img
+              width="300"
+              height="300"
+              id="donationAlertImgId"
+              src="https://static-cdn.jtvnw.net/jtv_user_pictures/08b15447-db0c-45a9-92e4-2418091cef30-profile_image-300x300.png"
+              alt="Shiml_der_Gamer47"
+              class="donation-alert-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div
+          id="donationAlertTextContainerId"
+          class="donation-alert-text-container"
+        >
+          <span id="donationAlertTextSpanId" class="donation-alert-text-span">
+            Aktuelle Donation
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
