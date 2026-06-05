@@ -59,39 +59,50 @@ document.addEventListener("DOMContentLoaded", () => {
         newOnOff = alertData.newOnOff;
         newDuration = alertData.newDuration;
 
-        resetAlertVariables();
-
         if (alertData.newFollowName) {
-          newFollowName = alertData.newFollowName;
-          newFollowImgUrl = alertData.newFollowImgUrl || "";
+          enqueueAlert({
+            type: "follow",
+            name: alertData.newFollowName,
+            imgUrl: alertData.newFollowImgUrl || "",
+          });
           console.log("🎬 FOLLOW Alert:", newFollowName);
-          alertAnimationToken();
         } else if (alertData.newSubName) {
-          newSubName = alertData.newSubName;
-          newSubImgUrl = alertData.newSubImgUrl || "";
+          enqueueAlert({
+            type: "sub",
+            name: alertData.newSubName,
+            imgUrl: alertData.newSubImgUrl || "",
+          });
           console.log("🎬 SUB Alert:", newSubName);
-          alertAnimationToken();
         } else if (alertData.newCheerName) {
-          newCheerName = alertData.newCheerName;
-          newCheerImgUrl = alertData.newCheerImgUrl || "";
+          enqueueAlert({
+            type: "cheer",
+            name: alertData.newCheerName,
+            imgUrl: alertData.newCheerImgUrl || "",
+          });
           console.log("🎬 CHEER Alert:", newCheerName);
-          alertAnimationToken();
         } else if (alertData.newRaidName) {
-          newRaidName = alertData.newRaidName;
-          newRaidImgUrl = alertData.newRaidImgUrl || "";
+          enqueueAlert({
+            type: "raid",
+            name: alertData.newRaidName,
+            imgUrl: alertData.newRaidImgUrl || "",
+          });
           console.log("🎬 RAID Alert:", newRaidName);
-          alertAnimationToken();
         } else if (alertData.newHostName) {
-          newHostName = alertData.newHostName;
-          newHostImgUrl = alertData.newHostImgUrl || "";
+          enqueueAlert({
+            type: "host",
+            name: alertData.newHostName,
+            imgUrl: alertData.newHostImgUrl || "",
+          });
           console.log("🎬 HOST Alert:", newHostName);
-          alertAnimationToken();
         } else if (alertData.newDonationName) {
-          newDonationName = alertData.newDonationName;
-          newDonationImgUrl = alertData.newDonationImgUrl || "";
+          enqueueAlert({
+            type: "donation",
+            name: alertData.newDonationName,
+            imgUrl: alertData.newDonationImgUrl || "",
+          });
           console.log("🎬 DONATION Alert:", newDonationName);
-          alertAnimationToken();
         } else {
+          resetAlertVariables();
           console.warn("⚠️ Keine Alert-Daten erkannt!");
         }
       }
@@ -122,22 +133,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const style = document.querySelector("style");
 
       function dataStyleToken() {
-        const followName = newFollowName;
-        const subName = newSubName;
-        const cheerName = newCheerName;
-        const raidName = newRaidName;
-        const hostName = newHostName;
-        const donationName = newDonationName;
+        const followName = newFollowName.trim();
+        const subName = newSubName.trim();
+        const cheerName = newCheerName.trim();
+        const raidName = newRaidName.trim();
+        const hostName = newHostName.trim();
+        const donationName = newDonationName.trim();
 
         const styleData = `
           @import url("sdg47-obs-studio-alert-widget.css");
 
-          .follow-alert-img[alt="${followName}"],
-          .sub-alert-img[alt="${subName}"],
-          .cheer-alert-img[alt="${cheerName}"],
-          .raid-alert-img[alt="${raidName}"],
-          .host-alert-img[alt="${hostName}"],
-          .donation-alert-img[alt="${donationName}"] {
+          .follow-alert-img[alt="${followName.trim()}"],
+          .sub-alert-img[alt="${subName.trim()}"],
+          .cheer-alert-img[alt="${cheerName.trim()}"],
+          .raid-alert-img[alt="${raidName.trim()}"],
+          .host-alert-img[alt="${hostName.trim()}"],
+          .donation-alert-img[alt="${donationName.trim()}"] {
             background: rgba(0, 0, 0, 0) !important;
             display: flex !important;
             align-items: center !important;
@@ -500,69 +511,124 @@ document.addEventListener("DOMContentLoaded", () => {
       })();
     })();
 
-    function setAlertToken() {
-      const followName = newFollowName;
-      const subName = newSubName;
-      const cheerName = newCheerName;
-      const raidName = newRaidName;
-      const hostName = newHostName;
-      const donationName = newDonationName;
+    let alertQueue = [];
+    let alertQueueRunning = false;
 
-      const followImgUrl = newFollowImgUrl;
-      const subImgUrl = newSubImgUrl;
-      const cheerImgUrl = newCheerImgUrl;
-      const raidImgUrl = newRaidImgUrl;
-      const hostImgUrl = newHostImgUrl;
-      const donationImgUrl = newDonationImgUrl;
+    function enqueueAlert(alertData) {
+      alertQueue.push(alertData);
+      console.log("📋 Queue-Größe:", alertQueue.length);
+
+      if (!alertQueueRunning) {
+        processAlertQueue();
+      }
+    }
+
+    async function processAlertQueue() {
+      if (alertQueue.length === 0) {
+        alertQueueRunning = false;
+        console.log("✅ Queue leer");
+        return;
+      }
+
+      alertQueueRunning = true;
+
+      const nextAlert = alertQueue.shift();
+      console.log("▶️ Starte Alert aus Queue:", nextAlert.type, nextAlert.name);
+
+      await runAlert(nextAlert);
+
+      processAlertQueue();
+    }
+
+    async function runAlert(alert) {
+      resetAlertVariables();
+
+      if (alert.type === "follow") {
+        newFollowName = alert.name;
+        newFollowImgUrl = alert.imgUrl;
+      } else if (alert.type === "sub") {
+        newSubName = alert.name;
+        newSubImgUrl = alert.imgUrl;
+      } else if (alert.type === "cheer") {
+        newCheerName = alert.name;
+        newCheerImgUrl = alert.imgUrl;
+      } else if (alert.type === "raid") {
+        newRaidName = alert.name;
+        newRaidImgUrl = alert.imgUrl;
+      } else if (alert.type === "host") {
+        newHostName = alert.name;
+        newHostImgUrl = alert.imgUrl;
+      } else if (alert.type === "donation") {
+        newDonationName = alert.name;
+        newDonationImgUrl = alert.imgUrl;
+      }
+
+      await alertAnimationToken();
+    }
+
+    function setAlertToken() {
+      const followName = newFollowName.trim();
+      const subName = newSubName.trim();
+      const cheerName = newCheerName.trim();
+      const raidName = newRaidName.trim();
+      const hostName = newHostName.trim();
+      const donationName = newDonationName.trim();
+
+      const followImgUrl = newFollowImgUrl.trim();
+      const subImgUrl = newSubImgUrl.trim();
+      const cheerImgUrl = newCheerImgUrl.trim();
+      const raidImgUrl = newRaidImgUrl.trim();
+      const hostImgUrl = newHostImgUrl.trim();
+      const donationImgUrl = newDonationImgUrl.trim();
 
       if (followName.trim()) {
         if (followAlertImgBgDiv && followAlertImg) {
-          followAlertImg.src = followImgUrl;
-          followAlertImg.alt = followName;
+          followAlertImg.src = followImgUrl.trim();
+          followAlertImg.alt = followName.trim();
         }
 
         if (followAlertTextDiv && followAlertTextSpan)
-          followAlertTextSpan.textContent = followName;
+          followAlertTextSpan.textContent = followName.trim();
       } else if (subName.trim()) {
         if (subAlertImgBgDiv && subAlertImg) {
-          subAlertImg.src = subImgUrl;
-          subAlertImg.alt = subName;
+          subAlertImg.src = subImgUrl.trim();
+          subAlertImg.alt = subName.trim();
         }
 
         if (subAlertTextDiv && subAlertTextSpan)
-          subAlertTextSpan.textContent = subName;
+          subAlertTextSpan.textContent = subName.trim();
       } else if (cheerName.trim()) {
         if (cheerAlertImgBgDiv && cheerAlertImg) {
-          cheerAlertImg.src = cheerImgUrl;
-          cheerAlertImg.alt = cheerName;
+          cheerAlertImg.src = cheerImgUrl.trim();
+          cheerAlertImg.alt = cheerName.trim();
         }
 
         if (cheerAlertTextDiv && cheerAlertTextSpan)
-          cheerAlertTextSpan.textContent = cheerName;
+          cheerAlertTextSpan.textContent = cheerName.trim();
       } else if (raidName.trim()) {
         if (raidAlertImgBgDiv && raidAlertImg) {
-          raidAlertImg.src = raidImgUrl;
-          raidAlertImg.alt = raidName;
+          raidAlertImg.src = raidImgUrl.trim();
+          raidAlertImg.alt = raidName.trim();
         }
 
         if (raidAlertTextDiv && raidAlertTextSpan)
-          raidAlertTextSpan.textContent = raidName;
+          raidAlertTextSpan.textContent = raidName.trim();
       } else if (hostName.trim()) {
         if (hostAlertImgBgDiv && hostAlertImg) {
-          hostAlertImg.src = hostImgUrl;
-          hostAlertImg.alt = hostName;
+          hostAlertImg.src = hostImgUrl.trim();
+          hostAlertImg.alt = hostName.trim();
         }
 
         if (hostAlertTextDiv && hostAlertTextSpan)
-          hostAlertTextSpan.textContent = hostName;
+          hostAlertTextSpan.textContent = hostName.trim();
       } else if (donationName.trim()) {
         if (donationAlertImgBgDiv && donationAlertImg) {
-          donationAlertImg.src = donationImgUrl;
-          donationAlertImg.alt = donationName;
+          donationAlertImg.src = donationImgUrl.trim();
+          donationAlertImg.alt = donationName.trim();
         }
 
         if (donationAlertTextDiv && donationAlertTextSpan)
-          donationAlertTextSpan.textContent = donationName;
+          donationAlertTextSpan.textContent = donationName.trim();
       }
     }
 
@@ -622,12 +688,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function alertAnimationToken() {
       try {
-        const followerNameNew = newFollowName;
-        const subscriptionNameNew = newSubName;
-        const cheerNameNew = newCheerName;
-        const raidNameNew = newRaidName;
-        const hostNameNew = newHostName;
-        const donationNameNew = newDonationName;
+        const followerNameNew = newFollowName.trim();
+        const subscriptionNameNew = newSubName.trim();
+        const cheerNameNew = newCheerName.trim();
+        const raidNameNew = newRaidName.trim();
+        const hostNameNew = newHostName.trim();
+        const donationNameNew = newDonationName.trim();
 
         const loading = newLoading;
         const onOff = newOnOff;
@@ -639,6 +705,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const cssClassSlideOutTextAlert = "slide-out-text-alert";
 
         const displayPorperty = "display";
+        const defValume = 1.0;
 
         innersAllTokens();
 
@@ -664,7 +731,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (followAlertVideo.src && followAlertAudio.src) {
             followAlertVideo.currentTime = zero;
+            followAlertVideo.volume = defValume;
             followAlertAudio.currentTime = zero;
+            followAlertAudio.volume = defValume;
 
             await Promise.all([
               followAlertVideo.readyState >= 3
@@ -766,7 +835,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (subAlertVideo.src && subAlertAudio.src) {
             subAlertVideo.currentTime = zero;
+            subAlertVideo.volume = defValume;
             subAlertAudio.currentTime = zero;
+            subAlertAudio.volume = defValume;
 
             await Promise.all([
               subAlertVideo.readyState >= 3
@@ -868,7 +939,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (cheerAlertVideo.src && cheerAlertAudio.src) {
             cheerAlertVideo.currentTime = zero;
+            cheerAlertVideo.volume = defValume;
             cheerAlertAudio.currentTime = zero;
+            cheerAlertAudio.volume = defValume;
 
             await Promise.all([
               cheerAlertVideo.readyState >= 3
@@ -970,7 +1043,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (raidAlertVideo.src && raidAlertAudio.src) {
             raidAlertVideo.currentTime = zero;
+            raidAlertVideo.volume = defValume;
             raidAlertAudio.currentTime = zero;
+            raidAlertAudio.volume = defValume;
 
             await Promise.all([
               raidAlertVideo.readyState >= 3
@@ -1072,7 +1147,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (hostAlertVideo.src && hostAlertAudio.src) {
             hostAlertVideo.currentTime = zero;
+            hostAlertVideo.volume = defValume;
             hostAlertAudio.currentTime = zero;
+            hostAlertAudio.volume = defValume;
 
             await Promise.all([
               hostAlertVideo.readyState >= 3
@@ -1174,7 +1251,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (donationAlertVideo.src && donationAlertAudio.src) {
             donationAlertVideo.currentTime = zero;
+            donationAlertVideo.volume = defValume;
             donationAlertAudio.currentTime = zero;
+            donationAlertAudio.volume = defValume;
 
             await Promise.all([
               donationAlertVideo.readyState >= 3
@@ -1290,22 +1369,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const elementArray = [
         followAlertVideoAudioDiv,
         followAlertImgDiv,
-        followAlertTextSpan,
+        //followAlertTextSpan,
         subAlertVideoAudioDiv,
         subAlertImgDiv,
-        subAlertTextSpan,
+        //subAlertTextSpan,
         cheerAlertVideoAudioDiv,
         cheerAlertImgDiv,
-        cheerAlertTextSpan,
+        //cheerAlertTextSpan,
         raidAlertVideoAudioDiv,
         raidAlertImgDiv,
-        raidAlertTextSpan,
+        //raidAlertTextSpan,
         hostAlertVideoAudioDiv,
         hostAlertImgDiv,
-        hostAlertTextSpan,
+        //hostAlertTextSpan,
         donationAlertVideoAudioDiv,
         donationAlertImgDiv,
-        donationAlertTextSpan,
+        //donationAlertTextSpan,
       ].filter(Boolean);
 
       elementArray.forEach((element) => {
